@@ -19,7 +19,7 @@
 }
 .player, .enemy{
     background: orange;
-    flex-grow: 1;
+    width: 20px;
 }
 .ball-area{
     background: yellow;
@@ -35,4 +35,9 @@
     background: white;
     height: 30px;
     width: 30px;
+}
+.space{
+    background: red;
+    width: 15vh;
+    height: 40px;
 }

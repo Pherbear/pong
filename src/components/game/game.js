@@ -9,7 +9,7 @@ export default function Game() {
   wh = player.width() - block.width(),
   wv = player.height() - block.height(),
   d = {},
-  x = 5;
+  x = 6;
 
   function newh(v,a,b) {
       var n = parseInt(v, 10) - (d[a] ? x : 0) + (d[b] ? x : 0);
@@ -40,6 +40,7 @@ export default function Game() {
   return (
     <div className ="container">
         <div className="game">
+          <div className='space'></div>
           <div className='player' id='player'>
             <div className='block' id='block'></div>
           </div>
@@ -49,6 +50,7 @@ export default function Game() {
           <div className='enemy'>
             <div className='block'></div>
           </div>
+        <div className='space'></div>
         </div>
     </div>
   )

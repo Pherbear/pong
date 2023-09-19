@@ -1,0 +1,9 @@
+.ball-area{
+    background: black;
+    flex-grow: 6;
+}
+.ball{
+    background: white;
+    height: 30px;
+    width: 30px;
+}

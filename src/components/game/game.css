@@ -10,34 +10,26 @@
 .container{
     border: black solid 5px;
     position: relative;
-    background: blue;
+    background: black;
     width: 100vh;
-    height: 95vh;
+    height: 70vh;
     margin: 0px;
     left: 0;
     top: 0;
 }
 .player, .enemy{
-    background: orange;
+    background: black;
     width: 20px;
 }
-.ball-area{
-    background: yellow;
-    flex-grow: 6;
-}
+
 .block{
     position: relative;
     background: white;
     height: 100px;
     width: 20px;
 }
-.ball{
-    background: white;
-    height: 30px;
-    width: 30px;
-}
 .space{
-    background: red;
+    background: black;
     width: 15vh;
     height: 40px;
 }

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './game.css';
 
 export default function Player(props) {
-    const [position, setPosition] = useState({ y: 0 });
+    const [gameStatus, setGameStatus] = useState(props.gameStatus)
+    const [position, setPosition] = useState({ y: 200 });
     const [keysPressed, setKeysPressed] = useState({
         ArrowUp: false,
         ArrowDown: false
@@ -10,7 +11,25 @@ export default function Player(props) {
 
     const playerRef = useRef(null);
     const blockRef = useRef(null);
-    const movementSpeed = 9;
+    const movementSpeed = 20;
+
+    //called if parent (game.js) changes status of game (true/false)
+    useEffect(() => {
+        setGameStatus(props.gameStatus)
+    }, [props.gameStatus])
+
+    //called if parent (game.js) calls a reset
+    useEffect(() => {
+        if (props.reset === true) {
+            resetPlayer()
+        }
+    }, [props.reset])
+
+    //reset the player position to the middle
+    function resetPlayer() {
+        setPosition({ y: 200 })
+        requestAnimationFrame(resetPlayer)
+    }
 
     const updatePosition = () => {
         if (!playerRef.current || !blockRef.current) return;
@@ -27,8 +46,10 @@ export default function Player(props) {
             newY += movementSpeed;
         }
 
-        setPosition({ y: newY });
-        requestAnimationFrame(updatePosition);
+        if (gameStatus == true){
+            setPosition({ y: newY })
+            requestAnimationFrame(updatePosition)
+        }
     };
 
     useEffect(() => {

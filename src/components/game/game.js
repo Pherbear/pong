@@ -3,59 +3,73 @@ import './game.css'
 import Ball from './ball';
 import Player from './player';
 
+
 export default function Game(props) {
   const [gameStatus, setGameStatus] = useState(true);
+  const [gameReset, setGameReset] = useState(false)
   const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
   const [ballPosition, setBallPosition] = useState({ x: 400, y: 0 });
   const [ballCollision, setBallCollision] = useState({block: 'none'});
 
+
+  //checks if collision touches block of player or opponent
   useEffect(() =>{
+    //player collision
     if(ballCollision.block == 'left') {
-      //console.log(playerPosition)
-      //console.log(ballPosition.x)
-      if(playerPosition.y > (ballPosition.x + 80) || playerPosition.y < (ballPosition.x - 48)){
+      console.log(playerPosition)
+      console.log(ballPosition)
+      if(playerPosition.y > (ballPosition.y + 30) || playerPosition.y < (ballPosition.y - 100)){
         setGameStatus(false)
       }
     }
+
+    //opponent collision
+    if(ballCollision.block == 'right'){
+      //TODO: insert logic here to check for opponent collision
+    }
   },[ballCollision])
 
+  //checks when a collison occurs between ball and boundaries
   useEffect(()=>{
-    //console.log(ballPosition)
+    //player
     if(ballPosition.x < 148) setBallCollision({block: 'left'})
+    //opponent
     else if (ballPosition.x > 605) setBallCollision({block: 'right'})
+    //no collision occuring
     else setBallCollision({block: 'none'})
-  },[ballPosition])
+  }, [ballPosition])
 
+
+  //sends gameStatus back to parent(app.js)
   useEffect(()=>{
-    //sends gameStatus back to parent(app.js)
     props.gameStatus(gameStatus)
+    if (gameStatus == true) setGameReset(false)
   },[gameStatus])
 
+  //called if parent request reset
   useEffect(()=>{
-    console.log('parent request')
-    //called if gamestatus is changed for parent
     if(props.reset === true && gameStatus === false){
-      //called if parent requests a reset and game is not running
-
-      //add code here to reset the game
-
+      setGameReset(true)
       setGameStatus(true)
     }
   },[props.reset])
   
   return (
     <>
-    <div className='game-status'>
-      {gameStatus 
-      ? <div style={{color:'black'}}>game: game is running</div> 
-      : <div style={{color:'black'}}>game: game is not running</div>
-      }
-    </div>
     <div className="container">
       <div className="game">
         <div className='space'></div>
-        <Player onPositionChange={(pos) => setPlayerPosition(pos)}/>
-        <Ball onPositionChange={(pos) => setBallPosition(pos)}/>
+        <Player 
+          onPositionChange={(pos) => setPlayerPosition(pos)}
+          gameStatus={gameStatus}
+          reset={gameReset}
+        />
+        <Ball 
+          onPositionChange={(pos) => setBallPosition(pos)}
+          gameStatus={gameStatus}
+          reset={gameReset}
+          playerPosition={playerPosition}
+        />
         <div className='enemy'>
           <div className='block'></div>
         </div>

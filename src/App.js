@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Game from './components/game/game';
 import './App.css'
 
@@ -9,8 +9,11 @@ function App() {
   function resetGame(){
     setReset(true)
     setGameStatus(true)
-    setReset(false)
   }
+
+  useEffect(() => {
+    if (gameStatus == true) setReset(false)
+  }, [gameStatus])
 
   return (
     <div>
@@ -21,9 +24,8 @@ function App() {
         />
       </div>
       <div className='button'>
-        parent:
         {gameStatus 
-        ? <>game running</> 
+        ? <>use arrow keys to move :)</> 
         : <>
             game over
             <button onClick={resetGame}>Try again?</button>

@@ -11,8 +11,8 @@
     border: black solid 5px;
     position: relative;
     background: black;
-    width: 100vh;
-    height: 70vh;
+    width: 800px;
+    height: 550px;
     margin: 0px;
     left: 0;
     top: 0;
@@ -30,6 +30,6 @@
 }
 .space{
     background: black;
-    width: 15vh;
+    width: 130px;
     height: 40px;
 }

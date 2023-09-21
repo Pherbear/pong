@@ -10,7 +10,7 @@ export default function Player(props) {
 
     const playerRef = useRef(null);
     const blockRef = useRef(null);
-    const movementSpeed = 6;
+    const movementSpeed = 9;
 
     const updatePosition = () => {
         if (!playerRef.current || !blockRef.current) return;
@@ -56,6 +56,10 @@ export default function Player(props) {
             window.removeEventListener('keyup', handleKeyUp);
         };
     }, [keysPressed]);
+
+    useEffect(() => {
+        props.onPositionChange(position)
+    }, [position])
 
     return (
         <div className='player' ref={playerRef}>

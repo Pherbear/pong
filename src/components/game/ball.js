@@ -2,14 +2,14 @@ import React, {useState, useEffect, useRef} from 'react'
 import './game.css'
 import './ball.css'
 
-export default function Ball() {
+export default function Ball(props) {
     const containerRef = useRef(null);
     const ballRef = useRef(null);
     const [containerBounds, setContainerBounds] = useState({ left: 0, right: 0 });
     const [ballSize, setBallSize] = useState({ width: 0, height: 0 });
     const [ballPosition, setBallPosition] = useState({  
-        x: (containerBounds.right - containerBounds.left) / 2 - ballSize.width / 2, 
-        y: 50  
+        x: 500, 
+        y: 200  
     });
     const [ballVelocity, setBallVelocity] = useState({ x: 5, y: 1 });
 
@@ -38,7 +38,6 @@ export default function Ball() {
         if (newPosX + ballSize.width >= containerWidth) {
             newPosX = containerWidth - ballSize.width;
             setBallVelocity(prevState => ({ ...prevState, x: -prevState.x }));
-            console.log()
         }
 
         // Set the updated position
@@ -50,6 +49,9 @@ export default function Ball() {
         return () => clearInterval(interval);
     }, [ballPosition, ballVelocity, containerBounds, ballSize]);
 
+    useEffect(()=>{
+        props.onPositionChange(ballPosition)
+    },[ballPosition])
     return (
         <div className='ball-area' ref={containerRef} id='pongBoard'>
           <div className='ball' id="pongBall" ref={ballRef} style={{ position: 'absolute', left: ballPosition.x, top: ballPosition.y }}></div>

@@ -12,26 +12,28 @@ function App() {
   }
 
   useEffect(() => {
-    if (gameStatus == true) setReset(false)
+    setReset(false)
+    if (gameStatus == false){
+      document.addEventListener('keydown', HandleSpace)
+    }
   }, [gameStatus])
+
+  const HandleSpace = (event) => {    
+    if(event.code === 'Space'){
+      resetGame()
+      document.removeEventListener('keydown', HandleSpace)
+    }  
+  };
 
   return (
     <div>
-      <div>
-        <Game 
-          gameStatus={(status) => setGameStatus(status)}
-          reset={reset}
-        />
-      </div>
+      <Game gameStatus={(status) => setGameStatus(status)} reset={reset}/>
       <div className='button'>
         {gameStatus 
         ? <>use arrow keys to move :)</> 
-        : <>
-            game over
-            <button onClick={resetGame}>Try again?</button>
-          </>
-        }
+        : <>game over: press space to try again.</>}
       </div>
+      current cpu difficulty: easy
     </div>
   );
 }

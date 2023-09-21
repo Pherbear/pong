@@ -4,7 +4,7 @@ import './ball.css'
 
 export default function Ball(props) {
 
-    let initialSpeed = 2
+    let initialSpeed = 4
 
     const containerRef = useRef(null)
     const ballRef = useRef(null)
@@ -16,8 +16,8 @@ export default function Ball(props) {
     const [ballPosition, setBallPosition] = useState({ x: 500, y: 200 })
     const [ballVelocity, setBallVelocity] = useState({ x: initialSpeed, y: 0 })
 
-    const [playerPosition, setPlayerPosition] = useState({ y:0 })
-
+    const [playerPosition, setPlayerPosition] = useState({ y: 0 })
+    const [enemyPosition, setEnemyPosition] = useState({ y: 0 })
 
 
     useEffect(() => {
@@ -38,12 +38,20 @@ export default function Ball(props) {
         setGameStatus(true)
     }
 
-    //calculation of distance the ball has from the center of the player block
+    //calculation of distance the ball has from the center of the player or enemy block
+    let speedMulitplier = 0.15
+
     function distFromPlayerCenter() {
-        let speedMulitplier = 0.10
         let centerPlayer = playerPosition.y + 50
         let centerBall = ballPosition.y + 15
         let distance = centerBall - centerPlayer
+        return (distance * speedMulitplier)
+    }
+
+    function distFromEnemyCenter() {
+        let centerEnemy = enemyPosition.y + 50
+        let centerBall = ballPosition.y + 15
+        let distance = centerBall - centerEnemy
         return (distance * speedMulitplier)
     }
 
@@ -68,7 +76,8 @@ export default function Ball(props) {
             newPosX = containerWidth - ballSize.width;
             setBallVelocity(prevState => ({ 
                 ...prevState, 
-                x: -prevState.x - speedIncrease 
+                x: -prevState.x - speedIncrease,
+                y: distFromEnemyCenter() 
             }));
         }
 
@@ -92,7 +101,9 @@ export default function Ball(props) {
         }
 
         // Set the updated position
-        if(gameStatus == true) setBallPosition({ x: newPosX, y: newPosY });
+        if(gameStatus == true) {
+            setBallPosition({ x: newPosX, y: newPosY });
+        }
     };
 
 
@@ -104,7 +115,12 @@ export default function Ball(props) {
     //sends ball position to parent
     useEffect(()=>{
         props.onPositionChange(ballPosition)
-    },[ballPosition])
+        props.onVelocityChange(ballVelocity)
+    },[ballPosition, ballVelocity])
+
+    useEffect(()=>{
+        setEnemyPosition(props.enemyPosition)
+    },[props.enemyPosition])
 
     //update player position from parent
     useEffect(()=>{

@@ -2,30 +2,35 @@ import React, {useEffect, useState} from 'react'
 import './game.css'
 import Ball from './ball';
 import Player from './player';
+import Enemy from './enemy';
 
 
 export default function Game(props) {
   const [gameStatus, setGameStatus] = useState(true);
   const [gameReset, setGameReset] = useState(false)
-  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+
+  const [enemyPosition, setEnemyPosition] = useState({ y:0 })
+  const [playerPosition, setPlayerPosition] = useState({ y: 0 });
+
   const [ballPosition, setBallPosition] = useState({ x: 400, y: 0 });
   const [ballCollision, setBallCollision] = useState({block: 'none'});
-
+  const [ballVelocity, setBallVelocity] = useState({ x: 0, y: 0 })
 
   //checks if collision touches block of player or opponent
   useEffect(() =>{
     //player collision
     if(ballCollision.block == 'left') {
-      console.log(playerPosition)
-      console.log(ballPosition)
-      if(playerPosition.y > (ballPosition.y + 30) || playerPosition.y < (ballPosition.y - 100)){
+      if(playerPosition.y > (ballPosition.y + 30) || playerPosition.y < (ballPosition.y - 105)){
         setGameStatus(false)
       }
     }
 
     //opponent collision
     if(ballCollision.block == 'right'){
-      //TODO: insert logic here to check for opponent collision
+      if(enemyPosition.y > (ballPosition.y + 30) || enemyPosition.y < (ballPosition.y - 100)){
+        setGameStatus(false)
+
+      }
     }
   },[ballCollision])
 
@@ -66,13 +71,19 @@ export default function Game(props) {
         />
         <Ball 
           onPositionChange={(pos) => setBallPosition(pos)}
+          onVelocityChange={(pos) => setBallVelocity(pos)}
           gameStatus={gameStatus}
           reset={gameReset}
           playerPosition={playerPosition}
+          enemyPosition={enemyPosition}
         />
-        <div className='enemy'>
-          <div className='block'></div>
-        </div>
+        <Enemy
+          onPositionChange={(pos) => setEnemyPosition(pos)}
+          gameStatus={gameStatus}
+          reset={gameReset}
+          ballPosition={ballPosition}
+          ballVelocity={ballVelocity}
+        />
         <div className='space'></div>
       </div>
     </div>
